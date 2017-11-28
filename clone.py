@@ -3,56 +3,95 @@ import cv2
 import numpy as np
 import os
 
+nrows = 160
+ncols = 320
+
+def get_data(last_start, lines, rand_indeces, batch_size, data_size):
+	stop = last_start + batch_size
+	if stop > data_size:
+		stop = data_size
+	
+	images = []
+	measurements = []
+	print('\n',last_start,stop)
+	for i in range(last_start,stop):
+		source_path = lines[rand_indeces[i]][0]
+		filename = source_path.split('/')[-1]
+		current_path = '../data/IMG/' + filename
+		if(os.path.exists(current_path)):
+			image = cv2.imread(current_path)
+			images.append(image)
+			measurement = float(line[3])
+			measurements.append(measurement)
+		else:
+			print(current_path, ' does not exist')
+		
+	X = np.asarray(images)
+	y = np.array(measurements)
+	datasize = X.shape[0]
+	shape_image = (datasize,nrows,ncols,3)
+	X = np.concatenate(X).reshape(shape_image)
+	return X, y, stop
+	
+			
+def get_train_data_from_generator(lines, rand_indeces, partition_ind, batch_size, train_data_size):
+	last_start_train = 0
+	while(True):
+		X_train, y_train, last_start_train = get_data(last_start_train, lines, rand_indeces, batch_size, train_data_size)
+		if last_start_train == train_data_size:
+			last_start_train = 0
+		yield (X_train, y_train)
+
+def get_val_data_from_generator(lines, rand_indeces, partition_ind, batch_size, total_data_size):
+	last_start_val = partition_ind
+	while(True):
+		X_val, y_val, last_start_val = get_data(last_start_val, lines, rand_indeces, batch_size, total_data_size)
+		if last_start_val == total_data_size:
+			last_start_val = partition_ind
+		yield (X_val, y_val)	
+				
 lines =[]
 with open('../data/driving_log.csv') as csvfile:
 	reader = csv.reader(csvfile)
 	for line in reader:
 		lines.append(line)
-
-images = []
-measurements = []
-
 #Remove first line
 lines.pop(0)
 
-total_datasize = len(lines)
-print(total_datasize)
-for line in lines:
-	source_path = line[0]
-	filename = source_path.split('/')[-1]
-	current_path = '../data/IMG/' + filename
-	if(os.path.exists(current_path)):
-		image = cv2.imread(current_path)
-		images.append(image)
-		measurement = float(line[3])
-		measurements.append(measurement)
-	else:
-		print(current_path, ' does not exist')
+#Define image size
+nrows = 160
+ncols = 320
 
-X_train = np.asarray(images)
-y_train = np.array(measurements)
+#Shuffle data and split data in training and validation
+split = 0.2
+total_data_size = len(lines)
+rand_indeces = np.arange(total_data_size)
+np.random.shuffle(rand_indeces)
+partition_ind = int(total_data_size*(1.0-split))
+train_data_size = partition_ind
+val_data_size = total_data_size - train_data_size
+print(total_data_size,train_data_size,val_data_size)
 
-datasize = X_train.shape[0]
-shape_image = X_train[0].shape
-nrows, ncols, nchannels = shape_image
-shape_image = (datasize,) + shape_image
-X_train = np.concatenate(X_train).reshape(shape_image)
-print(X_train.shape)
+#Define batch size
+batch_size = 512
+train_batch_epochs = int(train_data_size/batch_size) + 1
+val_batch_epochs = int(val_data_size/batch_size) + 1
 
 from keras.models import Sequential
 from keras.layers.convolutional import Convolution2D, Cropping2D
 from keras.layers import BatchNormalization
 from keras.layers.core import Dense, Flatten, Lambda
-
+import keras as ks
+		
 model = Sequential()
 model.add(Lambda(lambda x: x /255.0 - 0.5, input_shape = (nrows,ncols,3)))
-model.add(Cropping2D(cropping=((70,25),(1,1)), input_shape=(nrows,ncols,3)))
-model.add(BatchNormalization(epsilon=0.001,mode=2, axis=1,input_shape=(nrows-95,ncols-2,3)))
-model.add(Convolution2D(24,5,5,border_mode='valid', activation='relu', subsample=(2,2)))
-model.add(Convolution2D(36,5,5,border_mode='valid', activation='relu', subsample=(2,2)))
-model.add(Convolution2D(48,5,5,border_mode='valid', activation='relu', subsample=(2,2)))
-model.add(Convolution2D(64,3,3,border_mode='valid', activation='relu', subsample=(1,1)))
-model.add(Convolution2D(64,3,3,border_mode='valid', activation='relu', subsample=(1,1)))
+model.add(Cropping2D(cropping=((70,25),(0,0)), input_shape=(nrows,ncols,3)))
+model.add(BatchNormalization(epsilon=0.001, axis=1,input_shape=(nrows-95,ncols,3)))
+model.add(Convolution2D(24,(5,5),padding='valid', activation='relu', strides=(2,2)))
+model.add(Convolution2D(36,(5,5),padding='valid', activation='relu', strides=(2,2)))
+model.add(Convolution2D(48,(5,5),padding='valid', activation='relu', strides=(2,2)))
+model.add(Convolution2D(64,(3,3),padding='valid', activation='relu', strides=(1,1)))
+model.add(Convolution2D(64,(3,3),padding='valid', activation='relu', strides=(1,1)))
 model.add(Flatten())
 model.add(Dense(1164, activation='relu'))
 model.add(Dense(100, activation='relu'))
@@ -60,7 +99,6 @@ model.add(Dense(50, activation='relu'))
 model.add(Dense(10, activation='relu'))
 model.add(Dense(1, activation='tanh'))
 
-#model.compile(loss = 'mse', optimizer='adam')
-#model.fit(X_train, y_train, validation_split= 0.2, shuffle=True, nb_epoch = 5)
-
-#model.save('model.h5')
+model.compile(loss = 'mse', optimizer='adam')
+model.fit_generator(generator = get_train_data_from_generator(lines, rand_indeces, partition_ind, batch_size, train_data_size), steps_per_epoch = train_batch_epochs, validation_data =  get_val_data_from_generator(lines, rand_indeces, partition_ind, batch_size, total_data_size), validation_steps = val_batch_epochs, epochs = 5)
+model.save('model.h5')
