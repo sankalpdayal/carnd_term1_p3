@@ -3,6 +3,7 @@ import cv2
 import numpy as np
 import os
 
+#Define image size
 nrows = 160
 ncols = 320
 
@@ -13,19 +14,26 @@ def get_data(last_start, lines, rand_indeces, batch_size, data_size):
 	
 	images = []
 	measurements = []
-	print('\n',last_start,stop)
+	correction = np.array([0.0, 0.2, -0.2]) #center, left, right
+	#print('\n',last_start,stop)
 	for i in range(last_start,stop):
-		source_path = lines[rand_indeces[i]][0]
-		filename = source_path.split('/')[-1]
-		current_path = '../data/IMG/' + filename
-		if(os.path.exists(current_path)):
-			image = cv2.imread(current_path)
-			images.append(image)
-			measurement = float(line[3])
-			measurements.append(measurement)
-		else:
-			print(current_path, ' does not exist')
-		
+		for j in range(0,3):
+			source_path = lines[rand_indeces[i]][j]
+			filename = source_path.split('/')[-1]
+			current_path = '../data/IMG/' + filename
+			if(os.path.exists(current_path)):
+				image = cv2.imread(current_path)
+				images.append(image)
+				measurement = float(lines[rand_indeces[i]][3]) + correction[j]
+				measurements.append(measurement)
+				#Flipped image
+				image_flipped = np.fliplr(image)
+				images.append(image_flipped)
+				measurement_flipped = -measurement
+				measurements.append(measurement_flipped)
+			else:
+				print(current_path, ' does not exist')
+			
 	X = np.asarray(images)
 	y = np.array(measurements)
 	datasize = X.shape[0]
@@ -58,10 +66,6 @@ with open('../data/driving_log.csv') as csvfile:
 #Remove first line
 lines.pop(0)
 
-#Define image size
-nrows = 160
-ncols = 320
-
 #Shuffle data and split data in training and validation
 split = 0.2
 total_data_size = len(lines)
@@ -70,10 +74,10 @@ np.random.shuffle(rand_indeces)
 partition_ind = int(total_data_size*(1.0-split))
 train_data_size = partition_ind
 val_data_size = total_data_size - train_data_size
-print(total_data_size,train_data_size,val_data_size)
+#print(total_data_size,train_data_size,val_data_size)
 
 #Define batch size
-batch_size = 512
+batch_size = 256 #actual size is 256*6
 train_batch_epochs = int(train_data_size/batch_size) + 1
 val_batch_epochs = int(val_data_size/batch_size) + 1
 
@@ -100,5 +104,5 @@ model.add(Dense(10, activation='relu'))
 model.add(Dense(1, activation='tanh'))
 
 model.compile(loss = 'mse', optimizer='adam')
-model.fit_generator(generator = get_train_data_from_generator(lines, rand_indeces, partition_ind, batch_size, train_data_size), steps_per_epoch = train_batch_epochs, validation_data =  get_val_data_from_generator(lines, rand_indeces, partition_ind, batch_size, total_data_size), validation_steps = val_batch_epochs, epochs = 5)
+model.fit_generator(generator = get_train_data_from_generator(lines, rand_indeces, partition_ind, batch_size, train_data_size), steps_per_epoch = train_batch_epochs, validation_data =  get_val_data_from_generator(lines, rand_indeces, partition_ind, batch_size, total_data_size), validation_steps = val_batch_epochs, epochs = 5, shuffle=True)
 model.save('model.h5')
