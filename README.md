@@ -14,8 +14,8 @@ The goals / steps of this project are the following:
 
 [//]: # (Image References)
 
-[image1]: ./examples/ModelVisualization.png "Model Visualization"
-[image2]: ./examples/Center_Lane_Driving.png "Center Lane Driving"
+[image1]: ./examples/ModelVisualization.PNG "Model Visualization"
+[image2]: ./examples/Center_Lane_Driving.jpg "Center Lane Driving"
 [image3]: ./examples/off_road_start.jpg "Off Road Start"
 [image4]: ./examples/off_road_mid.jpg "Off Road Mid"
 [image5]: ./examples/off_road_center.jpg "Off Road Center"
@@ -140,33 +140,33 @@ At the end of the process, the vehicle is able to drive autonomously around the 
 
 The final model architecture (model.py lines 114-128) remaind the same because I realized successive improvements in the performance just by adding more data. 
 
-The model looks like ![alt text][image1]
+The model looks like ![Model Visualization][image1]
 
 
 #### 3. Creation of the Training Set & Training Process
 
 To start with, I used the data provided with the starter code which mostly had center lane driving. Here is an example image of center lane driving:
 
-![alt text][image2]
+![center lane driving][image2]
 
 I then recorded the vehicle recovering from the left side and right sides of the road back to center so that the vehicle would learn to recover if starts going off road.
 
 These images show what a recovery looks like as follows:
 
-![alt text][image3]
-![alt text][image4]
-![alt text][image5]
+![Off Road Start][image3]
+![Off Road Mid Recovery][image4]
+![Off Road Recovered][image5]
 
 To augment the data set, I use the left and right images with measurement correction. Theses images look as follows
 
-![alt text][image8]
-![alt text][image9]
-![alt text][image10]
+![Center Camera][image8]
+![Left Camera][image9]
+![Right Camera][image10]
 
 Further I flipped all images and angles thinking that this would simulate counter clockwise movement. For example, here is an image that has flipped:
 
-![alt text][image6]
-![alt text][image7]
+![Original Image][image6]
+![Flipped ][image7]
 
 After the collection process and flipping images, I had 77k number of data points. I finally randomly shuffled the data set and put 20% of the data into a validation set. 
 
@@ -177,8 +177,8 @@ I noticed beyond 5 validation error didnt reduce and some cases increased. So I 
 I used an adam optimizer so that manually training the learning rate wasn't necessary.
 
 I tested the final model for 2 different driving speeds to test the limits. Video run1.mp4 show car driving in autonomous mode at speed 12 and run2.mp4 at speed 9.
-![alt text][video2]
-![alt text][video1]
+![Auto Mode Speed 9mph][video2]
+![Auto Mode Speed 12mph][video1]
 
 ### 4. Training resources
 I tried training on both GPU and CPU. I noticed that it took about 6 hours to train on CPU and about 30 min to 40 min on GPU. 
