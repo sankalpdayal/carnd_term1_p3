@@ -200,13 +200,13 @@ I used an adam optimizer so that manually training the learning rate wasn't nece
 
 I tested the final model for 2 different driving speeds to test the limits. Video run1.mp4 show car driving in autonomous mode at speed 12 and run2.mp4 at speed 9.
 
-Auto Mode Speed 9mph
+Self Driving Mode Speed 9mph
 
-[![Auto Mode Speed 9mph](http://img.youtube.com/vi/kTJblUzZ-Gw/0.jpg)](http://www.youtube.com/watch?v=kTJblUzZ-Gw)
+[![Self Driving Mode Speed 9mph](http://img.youtube.com/vi/D8EkY1I-bE0/0.jpg)](http://www.youtube.com/watch?v=D8EkY1I-bE0)
 
-Auto Mode Speed 12mph
+Self Driving Mode Speed 12mph
 
-[![Auto Mode Speed 12mph](http://img.youtube.com/vi/D8EkY1I-bE0/0.jpg)](http://www.youtube.com/watch?v=D8EkY1I-bE0)
+[![Self Driving Mode Speed 12mph](http://img.youtube.com/vi/kTJblUzZ-Gw/0.jpg)](http://www.youtube.com/watch?v=kTJblUzZ-Gw)
 
 ### 4. Training resources
 I tried training on both GPU and CPU. I noticed that it took about 6 hours to train on CPU and about 30 min to 40 min on GPU. 
