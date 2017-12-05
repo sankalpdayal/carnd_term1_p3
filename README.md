@@ -153,6 +153,7 @@ To start with, I used the data provided with the starter code which mostly had c
 I then recorded the vehicle recovering from the left side and right sides of the road back to center so that the vehicle would learn to recover if starts going off road.
 
 These images show what a recovery looks like as follows:
+
 Off Road Start
 
 ![Off Road Start][image3]
@@ -166,6 +167,7 @@ Off Road Recovered
 ![Off Road Recovered][image5]
 
 To augment the data set, I use the left and right images with measurement correction. Theses images look as follows
+
 Center Camera
 
 ![Center Camera][image8]
@@ -179,6 +181,7 @@ Right Camera
 ![Right Camera][image10]
 
 Further I flipped all images and angles thinking that this would simulate counter clockwise movement. For example, here is an image that has flipped:
+
 Original Image
 
 ![Original Image][image6]
@@ -197,7 +200,11 @@ I used an adam optimizer so that manually training the learning rate wasn't nece
 
 I tested the final model for 2 different driving speeds to test the limits. Video run1.mp4 show car driving in autonomous mode at speed 12 and run2.mp4 at speed 9.
 
+Auto Mode Speed 9mph
+
 [![Auto Mode Speed 9mph](http://img.youtube.com/vi/kTJblUzZ-Gw/0.jpg)](http://www.youtube.com/watch?v=kTJblUzZ-Gw)
+
+Auto Mode Speed 12mph
 
 [![Auto Mode Speed 12mph](http://img.youtube.com/vi/D8EkY1I-bE0/0.jpg)](http://www.youtube.com/watch?v=D8EkY1I-bE0)
 
