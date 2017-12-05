@@ -211,4 +211,4 @@ Auto Mode Speed 12mph
 ### 4. Training resources
 I tried training on both GPU and CPU. I noticed that it took about 6 hours to train on CPU and about 30 min to 40 min on GPU. 
 
-Also since the data was so huge, loading it all together was difficult. Hence I python generator to yield data in batches and used keras fit_generator function to perform training using generator. 
+Also since the data was so huge, loading it all together was difficult. Hence I used python generator to yield data in batches and used keras fit_generator function to perform training using generator. 
