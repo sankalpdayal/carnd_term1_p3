@@ -25,7 +25,7 @@ The goals / steps of this project are the following:
 [image9]: ./examples/left.jpg "Left Image"
 [image10]: ./examples/right.jpg "Right Image"
 
-[video1]: ./run1.mp4 "Autonomous mode Speed 12 mph"
+[video1]: https://youtu.be/kTJblUzZ-Gw "Autonomous mode Speed 12 mph"
 [video2]: ./run2.mp4 "Autonomous mode Speed 9 mph"
 
 ## Rubric Points
@@ -40,6 +40,7 @@ The goals / steps of this project are the following:
 * drive.py for driving the car in autonomous mode
 * model.h5 containing a trained convolution neural network 
 * README.md summarizing the results
+* run2.mp4 and run1.mp4 showing the video of simulator running in self driving mode. run2.mp4 is at speed 9 and run1.mp4 is at speed 12.
 
 #### 2. Code Implementation
 Using the Udacity provided simulator and my drive.py file, the car can be driven autonomously around the track by executing 
@@ -65,33 +66,33 @@ The model.py file contains the code for training and saving the convolution neur
 
 My model is inspired from NVIDIA's self driving model. The architecutre looks like as follows
 
-Lambda layer: To normalize the pixels to range from -0.5 to 0.5.
+1. Lambda layer: To normalize the pixels to range from -0.5 to 0.5.
 
-Cropping Layer: To remove sky and front hood of the car. This allows only road to be visible.
+2. Cropping Layer: To remove sky and front hood of the car. This allows only road to be visible.
 
-BatchNormalization: Batch Normalization layer making normalization a part of the model architecture and performing the normalization for each training mini-batch.
+3. BatchNormalization: Batch Normalization layer making normalization a part of the model architecture and performing the normalization for each training mini-batch.
 
-Convolution2D: 5x5 kernal, 24 depth with relu activation and stride of 2x2
+4. Convolution2D: 5x5 kernal, 24 depth with relu activation and stride of 2x2
 
-Convolution2D: 5x5 kernal, 36 depth with relu activation and stride of 2x2
+5. Convolution2D: 5x5 kernal, 36 depth with relu activation and stride of 2x2
 
-Convolution2D: 5x5 kernal, 48 depth with relu activation and stride of 2x2
+6. Convolution2D: 5x5 kernal, 48 depth with relu activation and stride of 2x2
 
-Convolution2D: 3x3 kernal, 64 depth with relu activation and stride of 1x1
+7. Convolution2D: 3x3 kernal, 64 depth with relu activation and stride of 1x1
 
-Convolution2D: 3x3 kernal, 64 depth with relu activation and stride of 1x1
+8. Convolution2D: 3x3 kernal, 64 depth with relu activation and stride of 1x1
 
-Flatten
+9. Flatten
 
-Fully Connected Layer: 1164 with relu activation
+10. Fully Connected Layer: 1164 with relu activation
 
-Fully Connected Layer: 100 with relu activation
+11. Fully Connected Layer: 100 with relu activation
 
-Fully Connected Layer: 50 with relu activation
+12. Fully Connected Layer: 50 with relu activation
 
-Fully Connected Layer: 10 with relu activation
+13. Fully Connected Layer: 10 with relu activation
 
-Fully Connected Layer: 1 with tanh activation
+14. Fully Connected Layer: 1 with tanh activation
 
 Model's loss is taken as MSE because the label is a real number. 
  
@@ -140,7 +141,8 @@ At the end of the process, the vehicle is able to drive autonomously around the 
 
 The final model architecture (model.py lines 114-128) remaind the same because I realized successive improvements in the performance just by adding more data. 
 
-The model looks like ![Model Visualization][image1]
+The model looks like 
+![Model Visualization][image1]
 
 
 #### 3. Creation of the Training Set & Training Process
@@ -152,21 +154,26 @@ To start with, I used the data provided with the starter code which mostly had c
 I then recorded the vehicle recovering from the left side and right sides of the road back to center so that the vehicle would learn to recover if starts going off road.
 
 These images show what a recovery looks like as follows:
-
+Off Road Start
 ![Off Road Start][image3]
+Off Road Mid Recovery
 ![Off Road Mid Recovery][image4]
+Off Road Recovered
 ![Off Road Recovered][image5]
 
 To augment the data set, I use the left and right images with measurement correction. Theses images look as follows
-
+Center Camera
 ![Center Camera][image8]
+Left Camera
 ![Left Camera][image9]
+Right Camera
 ![Right Camera][image10]
 
 Further I flipped all images and angles thinking that this would simulate counter clockwise movement. For example, here is an image that has flipped:
-
+Original Image
 ![Original Image][image6]
-![Flipped ][image7]
+Flipped Image
+![Flipped Image][image7]
 
 After the collection process and flipping images, I had 77k number of data points. I finally randomly shuffled the data set and put 20% of the data into a validation set. 
 
@@ -177,8 +184,10 @@ I noticed beyond 5 validation error didnt reduce and some cases increased. So I 
 I used an adam optimizer so that manually training the learning rate wasn't necessary.
 
 I tested the final model for 2 different driving speeds to test the limits. Video run1.mp4 show car driving in autonomous mode at speed 12 and run2.mp4 at speed 9.
-![Auto Mode Speed 9mph][video2]
-![Auto Mode Speed 12mph][video1]
+
+[![Auto Mode Speed 9mph](http://img.youtube.com/vi/kTJblUzZ-Gw&feature=youtu.be/0.jpg)](http://www.youtube.com/watch?v=kTJblUzZ-Gw&feature=youtu.be)
+
+[![Auto Mode Speed 12mph](http://img.youtube.com/vi/D8EkY1I-bE0&feature=youtu.be/0.jpg)](http://www.youtube.com/watch?v=D8EkY1I-bE0&feature=youtu.be)
 
 ### 4. Training resources
 I tried training on both GPU and CPU. I noticed that it took about 6 hours to train on CPU and about 30 min to 40 min on GPU. 
