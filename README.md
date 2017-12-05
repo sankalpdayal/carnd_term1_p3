@@ -1,4 +1,4 @@
-#**Behavioral Cloning** 
+# **Behavioral Cloning** 
 
 ---
 
@@ -25,20 +25,23 @@ The goals / steps of this project are the following:
 [image9]: ./examples/left.jpg "Left Image"
 [image10]: ./examples/right.jpg "Right Image"
 
+[video1]: ./run1.mp4 "Autonomous mode Speed 12 mph"
+[video2]: ./run2.mp4 "Autonomous mode Speed 9 mph"
+
 ## Rubric Points
-###Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/432/view) individually and describe how I addressed each point in my implementation.  
+### Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/432/view) individually and describe how I addressed each point in my implementation.  
 
 ---
-###Files Submitted & Code Quality
+### Files Submitted & Code Quality
 
-####1. My project includes the following files to run the simulator in autonomous mode
+#### 1. My project includes the following files to run the simulator in autonomous mode
 
 * model.py containing the script to create and train the model
 * drive.py for driving the car in autonomous mode
 * model.h5 containing a trained convolution neural network 
 * writeup_report.md summarizing the results
 
-####2. Submission includes functional code
+#### 2. Submission includes functional code
 Using the Udacity provided simulator and my drive.py file, the car can be driven autonomously around the track by executing 
 To record the run, following command can be used.
 ```sh
@@ -52,13 +55,13 @@ python drive.py model.h5 run1
 ```
 where run1 is the name of the folder where all the images of current run will be stored.
 
-####3. Submission code is usable and readable
+#### 3. Submission code is usable and readable
 
 The model.py file contains the code for training and saving the convolution neural network. The file shows the pipeline I used for training and validating the model, and it contains comments to explain how the code works.
 
-###Model Architecture and Training Strategy
+### Model Architecture and Training Strategy
 
-####1. Model architecture
+#### 1. Model architecture
 
 My model is inspired from NVIDIA's self driving model. The architecutre looks like as follows
 
@@ -80,29 +83,29 @@ Fully Connected Layer: 1 with tanh activation
 
 Model's loss is taken as MSE because the label is a real number. 
  
-For more details on the architecture, you can look at the NVIDIA's paper on self driving [here] (https://arxiv.org/pdf/1604.07316.pdf)
+For more details on the architecture, you can look at the NVIDIA's paper on self driving [here](https://arxiv.org/pdf/1604.07316.pdf)
 
-####2. Attempts to reduce overfitting in the model
+#### 2. Attempts to reduce overfitting in the model
 
 The model was trained and validated on different data sets to ensure that the model was not overfitting (code line 21-90). The model was tested by running it through the simulator and ensuring that the vehicle could stay on the track.
 For the areas where the model was not doing well, I collected more data on recovery. In general I tried to keep the dataset large to reduce overfitting. 
 
 Also I kept track of training and validation error and kept the epoch low so that overfitting never happens.
 
-####3. Model parameter tuning
+#### 3. Model parameter tuning
 
 The model used an adam optimizer, so the learning rate was not tuned manually (model.py line 131).
 
-####4. Training data
+#### 4. Training data
 
 Training data was chosen to keep the vehicle driving on the road. I used a combination of center lane driving, recovering from the left and right sides of the road. 
 Also i used left and right images with correction of  0.2 degrees. This helped specially in cased of recovering whenever the car started drifting on sharp turns.
 
 For details about how I created the training data, see the next section. 
 
-###Model Architecture and Training Strategy
+### Model Architecture and Training Strategy
 
-####1. Solution Design Approach
+#### 1. Solution Design Approach
 
 The overall strategy for deriving a model architecture was to start with a well establish model like NVIDIA and refine it either by changing the model or adding more data.
 
@@ -121,14 +124,14 @@ This gave 6x size to the original data size.
 
 At the end of the process, the vehicle is able to drive autonomously around the track without leaving the road.
 
-####2. Final Model Architecture
+#### 2. Final Model Architecture
 
 The final model architecture (model.py lines 114-128) remaind the same because I realized successive improvements in the performance just by adding more data. 
 
 The model looks like ![Model used][image1]
 
 
-####3. Creation of the Training Set & Training Process
+#### 3. Creation of the Training Set & Training Process
 
 To start with, I used the data provided with the starter code which mostly had center lane driving. Here is an example image of center lane driving:
 
@@ -162,8 +165,10 @@ I noticed beyond 5 validation error didnt reduce and some cases increased. So I 
 I used an adam optimizer so that manually training the learning rate wasn't necessary.
 
 I tested the final model for 2 different driving speeds to test the limits. Video run1.mp4 show car driving in autonomous mode at speed 12 and run2.mp4 at speed 9.
+![Autonomous mode Speed 9 mph][video2]
+![Autonomous mode Speed 12 mph][video1]
 
-###4. Training resources
+### 4. Training resources
 I tried training on both GPU and CPU. I noticed that it took about 6 hours to train on CPU and about 30 min to 40 min on GPU. 
 
 Also since the data was so huge, loading it all together was difficult. Hence I python generator to yield data in batches and used keras fit_generator function to perform training using generator. 
