@@ -40,11 +40,16 @@ The goals / steps of this project are the following:
 
 ####2. Submission includes functional code
 Using the Udacity provided simulator and my drive.py file, the car can be driven autonomously around the track by executing 
+To record the run, following command can be used.
+```sh
 python drive.py model.h5
+```
 Then select autonomous mode.
 
 To record the run, following command can be used.
+```sh
 python drive.py model.h5 run1
+```
 where run1 is the name of the folder where all the images of current run will be stored.
 
 ####3. Submission code is usable and readable
