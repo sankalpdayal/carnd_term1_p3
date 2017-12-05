@@ -25,8 +25,6 @@ The goals / steps of this project are the following:
 [image9]: ./examples/left.jpg "Left Image"
 [image10]: ./examples/right.jpg "Right Image"
 
-[video1]: https://youtu.be/kTJblUzZ-Gw "Autonomous mode Speed 12 mph"
-[video2]: ./run2.mp4 "Autonomous mode Speed 9 mph"
 
 ## Rubric Points
 ### Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/432/view) individually and describe how I addressed each point in my implementation.  
@@ -142,6 +140,7 @@ At the end of the process, the vehicle is able to drive autonomously around the 
 The final model architecture (model.py lines 114-128) remaind the same because I realized successive improvements in the performance just by adding more data. 
 
 The model looks like 
+
 ![Model Visualization][image1]
 
 
@@ -155,24 +154,37 @@ I then recorded the vehicle recovering from the left side and right sides of the
 
 These images show what a recovery looks like as follows:
 Off Road Start
+
 ![Off Road Start][image3]
+
 Off Road Mid Recovery
+
 ![Off Road Mid Recovery][image4]
+
 Off Road Recovered
+
 ![Off Road Recovered][image5]
 
 To augment the data set, I use the left and right images with measurement correction. Theses images look as follows
 Center Camera
+
 ![Center Camera][image8]
+
 Left Camera
+
 ![Left Camera][image9]
+
 Right Camera
+
 ![Right Camera][image10]
 
 Further I flipped all images and angles thinking that this would simulate counter clockwise movement. For example, here is an image that has flipped:
 Original Image
+
 ![Original Image][image6]
+
 Flipped Image
+
 ![Flipped Image][image7]
 
 After the collection process and flipping images, I had 77k number of data points. I finally randomly shuffled the data set and put 20% of the data into a validation set. 
@@ -185,9 +197,9 @@ I used an adam optimizer so that manually training the learning rate wasn't nece
 
 I tested the final model for 2 different driving speeds to test the limits. Video run1.mp4 show car driving in autonomous mode at speed 12 and run2.mp4 at speed 9.
 
-[![Auto Mode Speed 9mph](http://img.youtube.com/vi/kTJblUzZ-Gw&feature=youtu.be/0.jpg)](http://www.youtube.com/watch?v=kTJblUzZ-Gw&feature=youtu.be)
+[![Auto Mode Speed 9mph](http://img.youtube.com/vi/kTJblUzZ-Gw/0.jpg)](http://www.youtube.com/watch?v=kTJblUzZ-Gw)
 
-[![Auto Mode Speed 12mph](http://img.youtube.com/vi/D8EkY1I-bE0&feature=youtu.be/0.jpg)](http://www.youtube.com/watch?v=D8EkY1I-bE0&feature=youtu.be)
+[![Auto Mode Speed 12mph](http://img.youtube.com/vi/D8EkY1I-bE0/0.jpg)](http://www.youtube.com/watch?v=D8EkY1I-bE0)
 
 ### 4. Training resources
 I tried training on both GPU and CPU. I noticed that it took about 6 hours to train on CPU and about 30 min to 40 min on GPU. 
