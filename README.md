@@ -161,6 +161,8 @@ I noticed beyond 5 validation error didnt reduce and some cases increased. So I 
 
 I used an adam optimizer so that manually training the learning rate wasn't necessary.
 
+I tested the final model for 2 different driving speeds to test the limits. Video run1.mp4 show car driving in autonomous mode at speed 12 and run2.mp4 at speed 9.
+
 ###4. Training resources
 I tried training on both GPU and CPU. I noticed that it took about 6 hours to train on CPU and about 30 min to 40 min on GPU. 
 
