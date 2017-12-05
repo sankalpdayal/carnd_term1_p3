@@ -39,11 +39,11 @@ The goals / steps of this project are the following:
 * model.py containing the script to create and train the model
 * drive.py for driving the car in autonomous mode
 * model.h5 containing a trained convolution neural network 
-* writeup_report.md summarizing the results
+* README.md summarizing the results
 
-#### 2. Submission includes functional code
+#### 2. Code Implementation
 Using the Udacity provided simulator and my drive.py file, the car can be driven autonomously around the track by executing 
-To record the run, following command can be used.
+To record the run, following command was used.
 ```sh
 python drive.py model.h5
 ```
@@ -55,7 +55,7 @@ python drive.py model.h5 run1
 ```
 where run1 is the name of the folder where all the images of current run will be stored.
 
-#### 3. Submission code is usable and readable
+#### 3. Submission code
 
 The model.py file contains the code for training and saving the convolution neural network. The file shows the pipeline I used for training and validating the model, and it contains comments to explain how the code works.
 
@@ -66,19 +66,31 @@ The model.py file contains the code for training and saving the convolution neur
 My model is inspired from NVIDIA's self driving model. The architecutre looks like as follows
 
 Lambda layer: To normalize the pixels to range from -0.5 to 0.5.
+
 Cropping Layer: To remove sky and front hood of the car. This allows only road to be visible.
+
 BatchNormalization: Batch Normalization layer making normalization a part of the model architecture and performing the normalization for each training mini-batch.
 
 Convolution2D: 5x5 kernal, 24 depth with relu activation and stride of 2x2
+
 Convolution2D: 5x5 kernal, 36 depth with relu activation and stride of 2x2
+
 Convolution2D: 5x5 kernal, 48 depth with relu activation and stride of 2x2
+
 Convolution2D: 3x3 kernal, 64 depth with relu activation and stride of 1x1
+
 Convolution2D: 3x3 kernal, 64 depth with relu activation and stride of 1x1
+
 Flatten
+
 Fully Connected Layer: 1164 with relu activation
+
 Fully Connected Layer: 100 with relu activation
+
 Fully Connected Layer: 50 with relu activation
+
 Fully Connected Layer: 10 with relu activation
+
 Fully Connected Layer: 1 with tanh activation
 
 Model's loss is taken as MSE because the label is a real number. 
@@ -90,7 +102,7 @@ For more details on the architecture, you can look at the NVIDIA's paper on self
 The model was trained and validated on different data sets to ensure that the model was not overfitting (code line 21-90). The model was tested by running it through the simulator and ensuring that the vehicle could stay on the track.
 For the areas where the model was not doing well, I collected more data on recovery. In general I tried to keep the dataset large to reduce overfitting. 
 
-Also I kept track of training and validation error and kept the epoch low so that overfitting never happens.
+Also I kept track of training and validation error and kept the number of epochs low so that overfitting never happens.
 
 #### 3. Model parameter tuning
 
@@ -128,33 +140,33 @@ At the end of the process, the vehicle is able to drive autonomously around the 
 
 The final model architecture (model.py lines 114-128) remaind the same because I realized successive improvements in the performance just by adding more data. 
 
-The model looks like ![Model used][image1]
+The model looks like ![alt text][image1]
 
 
 #### 3. Creation of the Training Set & Training Process
 
 To start with, I used the data provided with the starter code which mostly had center lane driving. Here is an example image of center lane driving:
 
-![Center Lane Driving][image2]
+![alt text][image2]
 
 I then recorded the vehicle recovering from the left side and right sides of the road back to center so that the vehicle would learn to recover if starts going off road.
 
 These images show what a recovery looks like as follows:
 
-![Off Road Start][image3]
-![Off Road Mid Recovery][image4]
-![Off Road Recovery][image5]
+![alt text][image3]
+![alt text][image4]
+![alt text][image5]
 
 To augment the data set, I use the left and right images with measurement correction. Theses images look as follows
 
-![Center Image][image8]
-![Left Image][image9]
-![Right Image][image10]
+![alt text][image8]
+![alt text][image9]
+![alt text][image10]
 
 Further I flipped all images and angles thinking that this would simulate counter clockwise movement. For example, here is an image that has flipped:
 
-![Normal Image][image6]
-![Flipped Image][image7]
+![alt text][image6]
+![alt text][image7]
 
 After the collection process and flipping images, I had 77k number of data points. I finally randomly shuffled the data set and put 20% of the data into a validation set. 
 
@@ -165,8 +177,8 @@ I noticed beyond 5 validation error didnt reduce and some cases increased. So I 
 I used an adam optimizer so that manually training the learning rate wasn't necessary.
 
 I tested the final model for 2 different driving speeds to test the limits. Video run1.mp4 show car driving in autonomous mode at speed 12 and run2.mp4 at speed 9.
-![Autonomous mode Speed 9 mph][video2]
-![Autonomous mode Speed 12 mph][video1]
+![alt text][video2]
+![alt text][video1]
 
 ### 4. Training resources
 I tried training on both GPU and CPU. I noticed that it took about 6 hours to train on CPU and about 30 min to 40 min on GPU. 
